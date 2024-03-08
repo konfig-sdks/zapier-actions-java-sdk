@@ -1,0 +1,451 @@
+openapi: 3.0.2
+info:
+  description: ""
+  title: Zapier AI Actions API
+  version: 1.0.0
+servers:
+- url: https://actions.zapier.com
+tags:
+- name: Action
+- name: Check
+- name: Configuration
+- name: Log
+paths:
+  /api/v1/check:
+    get:
+      description: Test that the API and auth are working.
+      operationId: Check_authTestGet
+      parameters: []
+      responses:
+        "200":
+          description: OK
+      security:
+      - SessionAuth: []
+      - AccessPointApiKeyHeader: []
+      - AccessPointApiKeyQuery: []
+      - AccessPointOAuth: []
+      summary: Check
+      tags:
+      - Check
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--api-v1-check
+      x-accepts: application/json
+  /api/v1/configuration-link:
+    get:
+      description: "Provides a link to configure more actions. Alternatively, searching\
+        \ through apps and actions will provide more specific configuration links."
+      operationId: Configuration_getConfigurationLink
+      parameters: []
+      responses:
+        "200":
+          description: OK
+      security:
+      - SessionAuth: []
+      - AccessPointApiKeyHeader: []
+      - AccessPointApiKeyQuery: []
+      - AccessPointOAuth: []
+      summary: Get Configuration Link
+      tags:
+      - Configuration
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--api-v1-configuration-link
+      x-accepts: application/json
+  /api/v1/exposed:
+    get:
+      description: List all the currently exposed actions for the given account.
+      operationId: Action_listExposedActions
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExposedActionResponseSchema'
+          description: OK
+      security:
+      - SessionAuth: []
+      - AccessPointApiKeyHeader: []
+      - AccessPointApiKeyQuery: []
+      - AccessPointOAuth: []
+      summary: List Exposed Actions
+      tags:
+      - Action
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--api-v1-exposed
+      x-accepts: application/json
+  /api/v1/exposed/{exposed_app_action_id}/execute:
+    post:
+      description: Give us a plain english description of exact action you want to
+        do. There should be dynamically generated documentation for this endpoint
+        for each action that is exposed.
+      operationId: Action_executeAppAction
+      parameters:
+      - example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+        explode: false
+        in: path
+        name: exposed_app_action_id
+        required: true
+        schema:
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: "^[A-Z0-9]{26}$"
+          title: Exposed App Action Id
+          type: string
+          x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          x-konfig-generated-schema: konfig-generated-schema-paths--api-v1-exposed-exposed_app_action_id-execute-post-parameters-0-schema
+        style: simple
+        x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+          x-do-not-generate: true
+      security:
+      - SessionAuth: []
+      - AccessPointApiKeyHeader: []
+      - AccessPointApiKeyQuery: []
+      - AccessPointOAuth: []
+      summary: Execute App Action Endpoint
+      tags:
+      - Action
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--api-v1-exposed-exposed_app_action_id-execute
+      x-content-type: application/json
+      x-accepts: application/json
+  /api/v1/execution-log/{execution_log_id}:
+    get:
+      description: Get the execution log for a given execution log id.
+      operationId: Log_getExecutionLog
+      parameters:
+      - example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+        explode: false
+        in: path
+        name: execution_log_id
+        required: true
+        schema:
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: "^[A-Z0-9]{26}$"
+          title: Execution Log Id
+          type: string
+          x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          x-konfig-generated-schema: konfig-generated-schema-paths--api-v1-execution-log-execution_log_id-get-parameters-0-schema
+        style: simple
+        x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecuteResponse'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Bad Request
+          x-do-not-generate: true
+      security:
+      - SessionAuth: []
+      - AccessPointApiKeyHeader: []
+      - AccessPointApiKeyQuery: []
+      - AccessPointOAuth: []
+      summary: Get Execution Log Endpoint
+      tags:
+      - Log
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--api-v1-execution-log-execution_log_id
+      x-accepts: application/json
+components:
+  schemas:
+    ExposedActionSchema:
+      example:
+        description: description
+        operation_id: operation_id
+        id: id
+        params: "{}"
+      properties:
+        description:
+          description: Description of the action.
+          title: Description
+          type: string
+        id:
+          description: The unique ID of the exposed action.
+          title: Id
+          type: string
+        operation_id:
+          description: The operation ID of the exposed action.
+          title: Operation Id
+          type: string
+        params:
+          description: Available hint fields for the action.
+          title: Params
+          type: object
+      required:
+      - description
+      - id
+      - operation_id
+      - params
+      title: ExposedActionSchema
+      type: object
+    ExposedActionResponseSchema:
+      example:
+        configuration_link: configuration_link
+        results:
+        - description: description
+          operation_id: operation_id
+          id: id
+          params: "{}"
+        - description: description
+          operation_id: operation_id
+          id: id
+          params: "{}"
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/ExposedActionSchema'
+          title: Results
+          type: array
+        configuration_link:
+          description: URL to configure and expose more actions.
+          title: Configuration Link
+          type: string
+      required:
+      - configuration_link
+      - results
+      title: ExposedActionResponseSchema
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    ExecuteResponse:
+      description: This is a summary of the results given the action that was executed.
+      example:
+        action_used: action_used
+        result: "{}"
+        assistant_hint: assistant_hint
+        input_params: "{}"
+        review_url: review_url
+        id: id
+        result_field_labels: "{}"
+        error: error
+        additional_results:
+        - "{}"
+        - "{}"
+        status: success
+      properties:
+        id:
+          description: The id of the execution log.
+          title: Id
+          type: string
+        action_used:
+          description: The name of the action that was executed.
+          title: Action Used
+          type: string
+        input_params:
+          description: The params we used / will use to execute the action.
+          title: Input Params
+          type: object
+        review_url:
+          description: The URL to run the action or review the AI choices the AI made
+            for input_params given instructions.
+          title: Review Url
+          type: string
+        result:
+          description: A trimmed down result of the first item of the full results.
+            Ideal for humans and language models!
+          title: Result
+          type: object
+        additional_results:
+          description: The rest of the full results. Always returns an array of objects
+          items:
+            type: object
+          title: Additional Results
+          type: array
+        result_field_labels:
+          description: Human readable labels for some of the keys in the result.
+          title: Result Field Labels
+          type: object
+        status:
+          default: success
+          description: The status of the execution.
+          enum:
+          - success
+          - error
+          - empty
+          - preview
+          example: success
+          title: Status
+          type: string
+          x-konfig-original-example: success
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ExecuteResponse-properties-status
+        error:
+          description: The error message if the execution failed.
+          title: Error
+          type: string
+        assistant_hint:
+          description: A hint for the assistant on what to do next.
+          title: Assistant Hint
+          type: string
+      required:
+      - action_used
+      - additional_results
+      - id
+      - input_params
+      - review_url
+      title: ExecuteResponse
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    ErrorResponse:
+      properties:
+        error:
+          description: Error message.
+          title: Error
+          type: string
+      required:
+      - error
+      title: ErrorResponse
+      type: object
+      x-konfig-is-used-in-non-successful-response: true
+      x-do-not-generate: true
+    ExecuteRequest:
+      description: |-
+        This extends from ExecuteRequestBase to add the preview_only option.
+
+        (1) Providers who allow side effects or (2) actions that do not have a side effect should use this class.
+      example:
+        instructions: instructions
+        preview_only: false
+      properties:
+        instructions:
+          description: "Plain english instructions. Provide as much detail as possible,\
+            \ even if other fields are present."
+          title: Instructions
+          type: string
+        preview_only:
+          default: false
+          description: "If true, we will not execute the action, but will return the\
+            \ params of the preview."
+          example: false
+          title: Preview Only
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ExecuteRequest-properties-preview_only
+      required:
+      - instructions
+      title: ExecuteRequest
+      type: object
+    konfig-generated-schema-paths--api-v1-exposed-exposed_app_action_id-execute-post-parameters-0-schema:
+      example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-paths--api-v1-execution-log-execution_log_id-get-parameters-0-schema:
+      example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ExecuteResponse-properties-status:
+      example: success
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ExecuteRequest-properties-preview_only:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-single-parameter-schema-get--api-v1-check:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--api-v1-configuration-link:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--api-v1-exposed:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--api-v1-exposed-exposed_app_action_id-execute:
+      properties:
+        exposed_app_action_id:
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: "^[A-Z0-9]{26}$"
+          title: Exposed App Action Id
+          type: string
+          x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          x-konfig-generated-schema: konfig-generated-schema-paths--api-v1-exposed-exposed_app_action_id-execute-post-parameters-0-schema
+        instructions:
+          description: "Plain english instructions. Provide as much detail as possible,\
+            \ even if other fields are present."
+          title: Instructions
+          type: string
+        preview_only:
+          default: false
+          description: "If true, we will not execute the action, but will return the\
+            \ params of the preview."
+          example: false
+          title: Preview Only
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ExecuteRequest-properties-preview_only
+      required:
+      - exposed_app_action_id
+      - instructions
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - exposed_app_action_id
+    konfig-generated-schema-single-parameter-schema-get--api-v1-execution-log-execution_log_id:
+      properties:
+        execution_log_id:
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          pattern: "^[A-Z0-9]{26}$"
+          title: Execution Log Id
+          type: string
+          x-konfig-original-example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          x-konfig-generated-schema: konfig-generated-schema-paths--api-v1-execution-log-execution_log_id-get-parameters-0-schema
+      required:
+      - execution_log_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - execution_log_id
+  securitySchemes:
+    SessionAuth:
+      in: cookie
+      name: nlasession
+      type: apiKey
+      x-konfig-globally-required-security: false
+    AccessPointApiKeyHeader:
+      in: header
+      name: X-API-Key
+      type: apiKey
+      x-konfig-globally-required-security: false
+    AccessPointApiKeyQuery:
+      in: query
+      name: api_key
+      type: apiKey
+      x-konfig-globally-required-security: false
+    AccessPointOAuth:
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth/authorize/
+          scopes:
+            nla:exposed_actions:execute: Run AI Actions
+          tokenUrl: /oauth/token/
+      type: oauth2
+      x-konfig-globally-required-security: false
+
